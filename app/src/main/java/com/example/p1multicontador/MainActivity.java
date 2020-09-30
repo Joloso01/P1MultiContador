@@ -4,85 +4,57 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.p1multicontador.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-    int contadorTotal, contador1, contador2, contador3, contador4;
+
+    int contadorTotal;
+    int[] contador = new int[4];
+    TextView[] textContador;
+    Button[]    buttonContador;
+    Button[] buttonReset;
     ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        textContador = new TextView[]{binding.contador1, binding.contador2, binding.contador3, binding.contador4};
+        buttonContador = new Button[]{binding.aumentar1, binding.aumentar2, binding.aumentar3, binding.aumentar4};
+        buttonReset = new Button[]{binding.reset1,binding.reset2,binding.reset3,binding.reset4};
 
-    }
-    public void aumentarContador(View view){
-        if (view.getId() == binding.aumentar1.getId()){
-            contadorTotal++;
-            contador1++;
-            binding.contador1.setText(String.valueOf(contador1));
-            binding.contadorTotal.setText(String.valueOf(contadorTotal));
-        }else if (view.getId() == binding.aumentar2.getId()){
-            contadorTotal++;
-            contador2++;
-            binding.contador2.setText(String.valueOf(contador2));
-            binding.contadorTotal.setText(String.valueOf(contadorTotal));
-        }else if (view.getId() == binding.aumentar3.getId()){
-            contadorTotal++;
-            contador3++;
-            binding.contador3.setText(String.valueOf(contador3));
-            binding.contadorTotal.setText(String.valueOf(contadorTotal));
-        }else if (view.getId() == binding.aumentar4.getId()){
-            contadorTotal++;
-            contador4++;
-            binding.contador4.setText(String.valueOf(contador4));
-            binding.contadorTotal.setText(String.valueOf(contadorTotal));
-        }else {
-            Toast.makeText(this, "Boton no valido",Toast.LENGTH_LONG);
+        for (int i = 0; i < 4; i++) {
+            final int ii = i;
+            buttonContador[ii].setOnClickListener(v -> {sumarAlcontador(ii);});
+            buttonReset[ii].setOnClickListener(v -> {reset(ii);});
+            binding.resetTotal.setOnClickListener(v -> {resetTodo(ii);});
         }
     }
 
-    public void borrarContador(View view){
-        if (view.getId() == binding.reset1.getId()){
-            contadorTotal = contadorTotal - contador1;
-            binding.contadorTotal.setText(String.valueOf(contadorTotal));
-            contador1 = 0;
-            binding.contador1.setText(String.valueOf(contador1));
-        }else if (view.getId() == binding.reset2.getId()){
-            contadorTotal = contadorTotal - contador2;
-            binding.contadorTotal.setText(String.valueOf(contadorTotal));
-            contador2 = 0;
-            binding.contador2.setText(String.valueOf(contador2));
-        }else if (view.getId() == binding.reset3.getId()){
-            contadorTotal = contadorTotal - contador3;
-            binding.contadorTotal.setText(String.valueOf(contadorTotal));
-            contador3 = 0;
-            binding.contador3.setText(String.valueOf(contador3));
-        }else if (view.getId() == binding.reset4.getId()){
-            contadorTotal = contadorTotal - contador4;
-            binding.contadorTotal.setText(String.valueOf(contadorTotal));
-            contador4 = 0;
-            binding.contador4.setText(String.valueOf(contador4));
-        }else {
-            Toast.makeText(this, "Boton no valido",Toast.LENGTH_LONG);
-        }
-    }
-
-    public void resetTodo(View view){
-        contadorTotal=0;
+    void sumarAlcontador(int i){
+        contador[i]++;
+        contadorTotal++;
+        textContador[i].setText(String.valueOf(contador[i]));
         binding.contadorTotal.setText(String.valueOf(contadorTotal));
-        contador1=0;
-        binding.contador1.setText(String.valueOf(contador1));
-        contador2=0;
-        binding.contador2.setText(String.valueOf(contador2));
-        contador3=0;
-        binding.contador3.setText(String.valueOf(contador3));
-        contador4=0;
-        binding.contador4.setText(String.valueOf(contador4));
+    }
+
+    void reset(int i){
+        contadorTotal = contadorTotal - contador[i];
+        binding.contadorTotal.setText(String.valueOf(contadorTotal));
+        contador[i] = 0;
+        textContador[i].setText(String.valueOf(contador[i]));
+    }
+
+    public void resetTodo(int i){
+        for (int j = 0; j < 4; j++) {
+            final int finalJ = j;
+            reset(j);
+        }
     }
 }
